@@ -19,14 +19,15 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.net.VpnService;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
 
 import com.github.megatronking.netbare.gateway.DefaultVirtualGatewayFactory;
 import com.github.megatronking.netbare.gateway.VirtualGatewayFactory;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import static androidx.core.content.ContextCompat.startForegroundService;
 
 /**
  * NetBare is a single instance, we can use this class to config and manage the NetBare service.
@@ -110,7 +111,7 @@ public final class NetBare {
         mNetBareConfig = config;
         Intent intent = new Intent(NetBareService.ACTION_START);
         intent.setPackage(mApp.getPackageName());
-        ContextCompat.startForegroundService(mApp, intent);
+        startForegroundService(mApp, intent);
     }
 
     /**
