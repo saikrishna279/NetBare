@@ -157,7 +157,7 @@ public final class NetBareUtils {
      * @return True means the build android Q.
      */
     public static boolean isAndroidQ() {
-        return "Q".equals(Build.VERSION.RELEASE);
+        return Build.VERSION.SDK_INT >= 29; /* For Q */
     }
 
 }
