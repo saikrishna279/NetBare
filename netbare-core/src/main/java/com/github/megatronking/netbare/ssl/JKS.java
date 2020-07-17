@@ -57,10 +57,29 @@ public class JKS {
     private final String certOrganization;
     private final String certOrganizationalUnitName;
 
+    private KeyStoreGenerationListener ksgListener = null;
+
     public JKS(@NonNull Context context, @NonNull String alias, @NonNull char[] password,
                @NonNull String commonName, @NonNull String organization,
                @NonNull String organizationalUnitName, @NonNull String certOrganization,
                @NonNull String certOrganizationalUnitName) {
+        this.keystoreDir = context.getCacheDir();
+        this.alias = alias;
+        this.password = password;
+        this.commonName = commonName;
+        this.organization = organization;
+        this.organizationalUnitName = organizationalUnitName;
+        this.certOrganization = certOrganization;
+        this.certOrganizationalUnitName = certOrganizationalUnitName;
+        createKeystore();
+    }
+
+    public JKS(@NonNull KeyStoreGenerationListener ksgListener,
+               @NonNull Context context, @NonNull String alias, @NonNull char[] password,
+               @NonNull String commonName, @NonNull String organization,
+               @NonNull String organizationalUnitName, @NonNull String certOrganization,
+               @NonNull String certOrganizationalUnitName) {
+        this.ksgListener = ksgListener;
         this.keystoreDir = context.getCacheDir();
         this.alias = alias;
         this.password = password;
@@ -113,6 +132,10 @@ public class JKS {
     private void createKeystore() {
         if (aliasFile(KEY_STORE_FILE_EXTENSION).exists() &&
                 aliasFile(KEY_PEM_FILE_EXTENSION).exists()) {
+            if(ksgListener != null){
+                ksgListener.keyStoreGenSuccess();
+                ksgListener = null;
+            }
             return;
         }
 
@@ -136,12 +159,15 @@ public class JKS {
                     pw.writeObject(cert);
                     pw.flush();
                     NetBareLog.i("Generate keystore succeed.");
+                    if(ksgListener != null) ksgListener.keyStoreGenSuccess();
                 } catch (Exception e) {
                     NetBareLog.e(e.getMessage());
+                    if(ksgListener != null) ksgListener.keyStoreGenFailed(e);
                 } finally {
                     NetBareUtils.closeQuietly(os);
                     NetBareUtils.closeQuietly(sw);
                     NetBareUtils.closeQuietly(pw);
+                    ksgListener = null;
                 }
             }
         }).start();
