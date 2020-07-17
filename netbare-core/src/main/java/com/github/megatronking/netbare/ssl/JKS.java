@@ -57,8 +57,6 @@ public class JKS {
     private final String certOrganization;
     private final String certOrganizationalUnitName;
 
-    private KeyStoreGenerationListener ksgListener = null;
-
     public JKS(@NonNull Context context, @NonNull String alias, @NonNull char[] password,
                @NonNull String commonName, @NonNull String organization,
                @NonNull String organizationalUnitName, @NonNull String certOrganization,
@@ -102,14 +100,6 @@ public class JKS {
         return certOrganizationalUnitName;
     }
 
-    public void setKeyStoreGenerationListener(KeyStoreGenerationListener ksgListener){
-        this.ksgListener = ksgListener;
-    }
-
-    public void removeKeyStoreGenerationListener(){
-        this.ksgListener = null;
-    }
-
     public boolean isInstalled() {
         return aliasFile(KEY_STORE_FILE_EXTENSION).exists() &&
                 aliasFile(KEY_PEM_FILE_EXTENSION).exists() &&
@@ -146,16 +136,8 @@ public class JKS {
                     pw.writeObject(cert);
                     pw.flush();
                     NetBareLog.i("Generate keystore succeed.");
-                    if(ksgListener != null){
-                        ksgListener.keyStoreGenSuccess();
-                        removeKeyStoreGenerationListener();
-                    }
                 } catch (Exception e) {
                     NetBareLog.e(e.getMessage());
-                    if(ksgListener != null){
-                        ksgListener.keyStoreGenFailed(e);
-                        removeKeyStoreGenerationListener();
-                    }
                 } finally {
                     NetBareUtils.closeQuietly(os);
                     NetBareUtils.closeQuietly(sw);
