@@ -38,6 +38,7 @@ import java.util.Map;
             httpSession = mHttpSession.get(id);
         } else {
             httpSession = new HttpSession();
+            httpSession.sessionID = id;
             mHttpSession.put(id, httpSession);
         }
         return httpSession;

@@ -27,22 +27,23 @@ import java.util.Map;
  * @author Megatron King
  * @since 2018-11-10 11:56
  */
-/* package */ class HttpSession {
+public class HttpSession {
 
-    boolean isHttps;
-    HttpProtocol protocol;
-    HttpMethod method;
-    String path;
-    Map<String, List<String>> requestHeaders = new LinkedHashMap<>();
-    Map<String, List<String>> responseHeaders = new LinkedHashMap<>();
-    int code;
-    String message;
-    int reqBodyOffset;
-    int resBodyOffset;
+    public String sessionID;
+    public boolean isHttps;
+    public HttpProtocol protocol;
+    public HttpMethod method;
+    public String path;
+    public Map<String, List<String>> requestHeaders = new LinkedHashMap<>();
+    public Map<String, List<String>> responseHeaders = new LinkedHashMap<>();
+    public int code;
+    public String message;
+    public int reqBodyOffset;
+    public int resBodyOffset;
     // Belows is for HTTP2
-    Http2Settings clientHttp2Settings;
-    Http2Settings peerHttp2Settings;
-    boolean requestStreamEnd;
-    boolean responseStreamEnd;
+    public Http2Settings clientHttp2Settings;
+    public Http2Settings peerHttp2Settings;
+    public boolean requestStreamEnd;
+    public boolean responseStreamEnd;
 
 }
