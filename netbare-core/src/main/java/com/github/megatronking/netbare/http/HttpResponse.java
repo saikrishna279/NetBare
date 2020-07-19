@@ -48,7 +48,7 @@ public class HttpResponse extends Response {
         this.mSession = session;
     }
 
-    /* package */ HttpSession session() {
+    public HttpSession session() {
         return mSession;
     }
 
